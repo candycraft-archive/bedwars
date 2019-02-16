@@ -1,0 +1,14 @@
+authors: [pauhull, GodTitan]
+name: BedWars
+version: 1.0
+main: de.novusmc.bedwars.BedWars
+load: POSTWORLD
+softdepend: [Multiverse-Core, NickAPI]
+
+commands:
+  npc:
+  setlocation:
+  spawner:
+  bed:
+  start:
+  stats:
