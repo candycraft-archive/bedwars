@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -28,7 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SpawnerManager {
 
     @Getter
-    private static HashMap<Location, SpawnerType> spawners = new HashMap<>();
+    private static HashMap<SpawnerType, List<Location>> spawners = new HashMap<>();
 
     private int goldSpawns = 0;
     private int spawnerTask = -1;
@@ -49,35 +48,16 @@ public class SpawnerManager {
             if (config.isSet(type.name())) {
                 @SuppressWarnings("unchecked")
                 List<Location> locations = (List<Location>) config.getList(type.name());
-                for (Location location : locations) {
-                    spawners.put(location, type);
-                }
+                ArrayList<Location> copy = new ArrayList<>(locations);
+                spawners.put(type, copy);
             }
         }
     }
 
     public void save() {
-        List<Location> bronzeList = new ArrayList<>();
-        List<Location> ironList = new ArrayList<>();
-        List<Location> goldList = new ArrayList<>();
-
-        for (Location location : spawners.keySet()) {
-            switch (spawners.get(location)) {
-                case BRONZE:
-                    bronzeList.add(location);
-                    break;
-                case IRON:
-                    ironList.add(location);
-                    break;
-                case GOLD:
-                    goldList.add(location);
-                    break;
-            }
-        }
-
-        config.set("BRONZE", bronzeList);
-        config.set("IRON", ironList);
-        config.set("GOLD", goldList);
+        config.set("BRONZE", spawners.get(SpawnerType.BRONZE));
+        config.set("IRON", spawners.get(SpawnerType.IRON));
+        config.set("GOLD", spawners.get(SpawnerType.GOLD));
 
         try {
             config.save(file);
@@ -87,7 +67,14 @@ public class SpawnerManager {
     }
 
     public void add(Location location, SpawnerType type) {
-        spawners.put(location, type);
+        List<Location> locations;
+        if (spawners.containsKey(type)) {
+            locations = spawners.get(type);
+        } else {
+            locations = new ArrayList<>();
+        }
+        locations.add(location);
+        spawners.put(type, locations);
         save();
     }
 
@@ -105,22 +92,21 @@ public class SpawnerManager {
 
         final AtomicInteger passedSeconds = new AtomicInteger(0);
         this.spawnerTask = Bukkit.getScheduler().scheduleSyncRepeatingTask(bedWars, () -> {
-            for (Map.Entry<Location, SpawnerType> entry : spawners.entrySet()) {
-                Location location = entry.getKey();
-                SpawnerType type = entry.getValue();
+            for (SpawnerType type : spawners.keySet()) {
+                for (Location location : spawners.get(type)) {
+                    if (type == SpawnerType.BRONZE
+                            || (type == SpawnerType.IRON && passedSeconds.get() % 10 == 0)
+                            || (type == SpawnerType.GOLD && passedSeconds.get() % 30 == 0)) {
 
-                if (type == SpawnerType.BRONZE
-                        || (type == SpawnerType.IRON && passedSeconds.get() % 10 == 0)
-                        || (type == SpawnerType.GOLD && passedSeconds.get() % 30 == 0)) {
+                        if (type == SpawnerType.GOLD && goldSpawns++ < 3) { // first 3 spawns are skipped
+                            break;
+                        }
 
-                    if (type == SpawnerType.GOLD && goldSpawns++ < 3) { // first 3 spawns are skipped
-                        break;
-                    }
+                        location.getWorld().dropItem(location, type.item);
 
-                    location.getWorld().dropItem(location, type.item);
-
-                    for (int i = 0; i < 25; i++) {
-                        ParticleEffect.SPELL_MOB.display(type.particleColor, location, 50);
+                        for (int i = 0; i < 25; i++) {
+                            ParticleEffect.SPELL_MOB.display(type.particleColor, location, 50);
+                        }
                     }
                 }
             }

@@ -113,26 +113,22 @@ public class NPC {
     }
 
     public void spawn() {
-        // you first have to send the tablist information to all players or the npc will be invisible
-        sendPacket(infoAddPacket);
-        // then you spawn the npc with the spawnPacket
-        sendPacket(spawnPacket);
-        // you have to rotate the npc's head by yourself (which is really weird)
-        sendPacket(rotationPacket);
-        // half a second after the npc is spawned you can safely remove it from the tablist if you want
-        if (!showInTablist) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(BedWars.getInstance(), () -> {
-                sendPacket(infoRemovePacket);
-            }, 10L);
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            spawn(player);
         }
         npcs.add(this);
     }
 
     public void spawn(Player player) {
         if (!npcs.contains(this)) return;
+        if (!location.getWorld().equals(player.getWorld())) return;
+        // you first have to send the tablist information to all players or the npc will be invisible
         sendPacket(player, infoAddPacket);
+        // then you spawn the npc with the spawnPacket
         sendPacket(player, spawnPacket);
+        // you have to rotate the npc's head by yourself (which is really weird)
         sendPacket(player, rotationPacket);
+        // half a second after the npc is spawned you can safely remove it from the tablist if you want
         if (!showInTablist) {
             Bukkit.getScheduler().scheduleSyncDelayedTask(BedWars.getInstance(), () -> {
                 sendPacket(infoRemovePacket);

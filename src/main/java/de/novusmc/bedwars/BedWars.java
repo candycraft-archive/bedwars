@@ -84,6 +84,8 @@ public class BedWars extends JavaPlugin {
     private MySQL mySQL;
     @Getter
     private StatsTable statsTable;
+    @Getter
+    private FileConfiguration gameSettings;
 
     @Override
     public void onEnable() {
@@ -94,6 +96,7 @@ public class BedWars extends JavaPlugin {
         this.placedBlocks = new ArrayList<>();
         this.configFile = new File(getDataFolder(), "config.yml");
         this.config = copyAndLoad("config.yml", configFile);
+        this.gameSettings = copyAndLoad("gameSettings.yml", new File(getDataFolder(), "gameSettings.yml"));
         this.pluginEnabled = config.getBoolean("Enabled");
         this.executorService = Executors.newSingleThreadExecutor();
         this.phaseHandler = new GamePhaseHandler();
@@ -118,7 +121,7 @@ public class BedWars extends JavaPlugin {
 
         Team.loadLocations(locationManager);
         Team.loadBeds(bedManager);
-        Team.TEAM_SIZE = config.getInt("TeamSize");
+        Team.TEAM_SIZE = gameSettings.getInt("PlayersPerTeam");
         Team.TEAM_AMOUNT = Team.getActiveTeamAmount();
         Team.MIN_PLAYERS = Team.TEAM_SIZE + 1;
         Team.MAX_PLAYERS = Team.TEAM_SIZE * Team.TEAM_AMOUNT;

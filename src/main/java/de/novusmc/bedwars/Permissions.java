@@ -12,6 +12,6 @@ public class Permissions {
     public static final String NPC = "bedwars.npc";
     public static final String SET_LOCATION = "bedwars.setlocation";
     public static final String BED = "bedwars.bed";
-    public static final String START = "bedwars.start";
+    public static final String START = "game.start";
 
 }

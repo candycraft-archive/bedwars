@@ -1,5 +1,6 @@
 package de.novusmc.bedwars.display;
 
+import cloud.timo.TimoCloud.api.TimoCloudAPI;
 import de.novusmc.bedwars.BedWars;
 import de.novusmc.bedwars.game.Team;
 import de.pauhull.friends.common.party.Party;
@@ -29,6 +30,9 @@ public class LobbyScoreboard extends NovusScoreboard {
     public void show() {
         new NovusScore(" §d§lCandyCraft§7.§dde");
         new NovusScore("Server:");
+        new NovusScore();
+        new NovusScore(" §c" + TimoCloudAPI.getBukkitAPI().getThisServer().getMap());
+        new NovusScore("Map:");
         new NovusScore();
         this.team = new NovusScore("§b Lädt");
         new NovusScore("Team:");
