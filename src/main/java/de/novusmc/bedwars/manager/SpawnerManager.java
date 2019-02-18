@@ -102,7 +102,9 @@ public class SpawnerManager {
                             break;
                         }
 
-                        location.getWorld().dropItem(location, type.item);
+                        for (int i = 0; i < type.getDropAmount(); i++) {
+                            location.getWorld().dropItem(location, type.item);
+                        }
 
                         for (int i = 0; i < 25; i++) {
                             ParticleEffect.SPELL_MOB.display(type.particleColor, location, 50);
@@ -126,9 +128,9 @@ public class SpawnerManager {
 
     public enum SpawnerType {
 
-        BRONZE(new ItemBuilder(Material.CLAY_BRICK).setDisplayName("§cBronze").build(), new ParticleEffect.OrdinaryColor(255, 127, 64)),
-        IRON(new ItemBuilder(Material.IRON_INGOT).setDisplayName("§7Eisen").build(), new ParticleEffect.OrdinaryColor(193, 193, 193)),
-        GOLD(new ItemBuilder(Material.GOLD_INGOT).setDisplayName("§6Gold").build(), new ParticleEffect.OrdinaryColor(255, 233, 0));
+        BRONZE(new ItemBuilder(Material.CLAY_BRICK).setDisplayName("§cBronze").build(), new ParticleEffect.OrdinaryColor(255, 127, 64), 2),
+        IRON(new ItemBuilder(Material.IRON_INGOT).setDisplayName("§7Eisen").build(), new ParticleEffect.OrdinaryColor(193, 193, 193), 1),
+        GOLD(new ItemBuilder(Material.GOLD_INGOT).setDisplayName("§6Gold").build(), new ParticleEffect.OrdinaryColor(255, 233, 0), 1);
 
         @Getter
         private ItemStack item;
@@ -136,9 +138,13 @@ public class SpawnerManager {
         @Getter
         private ParticleEffect.OrdinaryColor particleColor;
 
-        SpawnerType(ItemStack item, ParticleEffect.OrdinaryColor particleColor) {
+        @Getter
+        private int dropAmount;
+
+        SpawnerType(ItemStack item, ParticleEffect.OrdinaryColor particleColor, int dropAmount) {
             this.item = item;
             this.particleColor = particleColor;
+            this.dropAmount = dropAmount;
         }
 
     }

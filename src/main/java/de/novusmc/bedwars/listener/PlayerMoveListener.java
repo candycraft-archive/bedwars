@@ -53,12 +53,13 @@ public class PlayerMoveListener implements Listener {
                     if (spectatorSpawn != null) {
                         player.teleport(spectatorSpawn);
                     }
-                    return;
+                    //return;
                 }
-
+                /*
                 if (!player.isDead()) {
                     player.setHealth(0.0);
                 }
+                */
             } else {
                 Team team = Team.getTeam(player);
                 if (team != null) {

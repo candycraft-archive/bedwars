@@ -80,7 +80,7 @@ public class IngameScoreboard extends NovusScoreboard {
         for (Team allTeams : Team.values()) {
             NovusScore score;
             if ((score = scores.get(allTeams)) != null) {
-                String entry = (allTeams.isHasBed() && !allTeams.getMembers().isEmpty() ? "§a§l✔§r " : "§c§l✘§r ") + allTeams.getColoredName();
+                String entry = (allTeams.isHasBed() && !allTeams.getMembers().isEmpty() ? "§a§l✔§r " : "§c§l✘§r ") + allTeams.getColoredName() + "§8 (" + allTeams.getMembers().size() + "/" + Team.TEAM_SIZE + ")";
                 if (!score.getScore().getEntry().equals(entry)) {
                     score.setName(entry);
                 }
@@ -97,7 +97,7 @@ public class IngameScoreboard extends NovusScoreboard {
 
                 String name = team != null ? team.name() + player.getName() : "Z" + player.getName();
                 if (name.length() > 16) {
-                    name = name.substring(16);
+                    name = name.substring(0, 16);
                 }
 
                 if (scoreboard.getTeam(name) != null) {

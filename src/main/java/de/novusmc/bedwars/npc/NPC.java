@@ -132,7 +132,7 @@ public class NPC {
         if (!showInTablist) {
             Bukkit.getScheduler().scheduleSyncDelayedTask(BedWars.getInstance(), () -> {
                 sendPacket(infoRemovePacket);
-            }, 20L);
+            }, 30L);
         }
     }
 

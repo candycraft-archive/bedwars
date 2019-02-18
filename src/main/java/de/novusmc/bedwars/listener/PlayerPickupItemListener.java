@@ -5,6 +5,7 @@ import de.novusmc.bedwars.game.Team;
 import de.novusmc.bedwars.util.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -40,7 +41,10 @@ public class PlayerPickupItemListener implements Listener {
             }
 
             builder.setDisplayName("§9Blöcke");
-            event.getItem().setItemStack(builder.build());
+            player.getInventory().addItem(builder.build());
+            player.getWorld().playSound(event.getItem().getLocation(), Sound.ITEM_PICKUP, 1, 1);
+            event.setCancelled(true);
+            event.getItem().remove();
         }
 
         if (bedWars.getSpectators().contains(player)) {
