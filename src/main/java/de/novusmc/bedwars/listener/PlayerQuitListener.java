@@ -3,6 +3,7 @@ package de.novusmc.bedwars.listener;
 import de.novusmc.bedwars.BedWars;
 import de.novusmc.bedwars.Messages;
 import de.novusmc.bedwars.game.Team;
+import de.novusmc.bedwars.manager.SpectatorManager;
 import de.novusmc.bedwars.phase.GamePhase;
 import de.novusmc.bedwars.phase.type.IngamePhase;
 import org.bukkit.Bukkit;
@@ -30,6 +31,7 @@ public class PlayerQuitListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
+        SpectatorManager.getSpectating().remove(player);
         bedWars.getSpectators().remove(player);
 
         Team team = Team.getTeam(player);
