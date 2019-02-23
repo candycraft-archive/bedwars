@@ -5,7 +5,7 @@ import de.novusmc.bedwars.BedWars;
 import de.novusmc.bedwars.game.Team;
 import de.pauhull.friends.common.party.Party;
 import de.pauhull.friends.spigot.SpigotFriends;
-import de.pauhull.scoreboard.NovusScoreboard;
+import de.pauhull.scoreboard.CustomScoreboard;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -17,9 +17,9 @@ import org.bukkit.entity.Player;
  *
  * @author pauhull
  */
-public class LobbyScoreboard extends NovusScoreboard {
+public class LobbyScoreboard extends CustomScoreboard {
 
-    private NovusScore online, team;
+    private DisplayScore online, team;
 
     public LobbyScoreboard(Player player) {
         super(player, player.getName() + "_lobby", "§5§lWarten auf Spielstart...");
@@ -28,18 +28,18 @@ public class LobbyScoreboard extends NovusScoreboard {
 
     @Override
     public void show() {
-        new NovusScore(" §d§lCandyCraft§7.§dde");
-        new NovusScore("Server:");
-        new NovusScore();
-        new NovusScore(" §c" + TimoCloudAPI.getBukkitAPI().getThisServer().getMap());
-        new NovusScore("Map:");
-        new NovusScore();
-        this.team = new NovusScore("§b Lädt");
-        new NovusScore("Team:");
-        new NovusScore();
-        this.online = new NovusScore("§a Lädt");
-        new NovusScore("Online:");
-        new NovusScore();
+        new DisplayScore(" §d§lCandyCraft§7.§dde");
+        new DisplayScore("Server:");
+        new DisplayScore();
+        new DisplayScore(" §c" + TimoCloudAPI.getBukkitAPI().getThisServer().getMap());
+        new DisplayScore("Map:");
+        new DisplayScore();
+        this.team = new DisplayScore("§b Lädt");
+        new DisplayScore("Team:");
+        new DisplayScore();
+        this.online = new DisplayScore("§a Lädt");
+        new DisplayScore("Online:");
+        new DisplayScore();
 
         super.show();
     }

@@ -1,9 +1,9 @@
-authors: [pauhull, GodTitan]
+author: pauhull
 name: BedWars
 version: 1.0
 main: de.novusmc.bedwars.BedWars
 load: POSTWORLD
-softdepend: [Multiverse-Core, NickAPI]
+softdepend: [Multiverse-Core, NickAPI, NpcApi]
 
 commands:
   npc:

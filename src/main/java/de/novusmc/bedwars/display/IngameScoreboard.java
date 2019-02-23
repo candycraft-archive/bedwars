@@ -7,7 +7,7 @@ import de.novusmc.bedwars.phase.GamePhase;
 import de.novusmc.bedwars.phase.type.IngamePhase;
 import de.pauhull.friends.common.party.Party;
 import de.pauhull.friends.spigot.SpigotFriends;
-import de.pauhull.scoreboard.NovusScoreboard;
+import de.pauhull.scoreboard.CustomScoreboard;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -24,13 +24,11 @@ import java.util.Map;
  *
  * @author pauhull
  */
-public class IngameScoreboard extends NovusScoreboard {
-
-    // ✔ ✘
+public class IngameScoreboard extends CustomScoreboard {
 
     private static List<Team> playingTeams = null;
-    private NovusScore currentTeam;
-    private Map<Team, NovusScore> scores = new HashMap<>();
+    private DisplayScore currentTeam;
+    private Map<Team, DisplayScore> scores = new HashMap<>();
 
     public IngameScoreboard(Player player) {
         super(player, player.getName() + "_ingame", "§e§lBedWars§8 | §730:00");
@@ -48,16 +46,16 @@ public class IngameScoreboard extends NovusScoreboard {
 
     @Override
     public void show() {
-        new NovusScore(" §d§lCandyCraft§7.§dde");
-        new NovusScore("Server:");
-        new NovusScore();
+        new DisplayScore(" §d§lCandyCraft§7.§dde");
+        new DisplayScore("Server:");
+        new DisplayScore();
         for (Team team : Lists.reverse(playingTeams)) {
-            scores.put(team, new NovusScore("§a§l✔§r " + team.getColoredName()));
+            scores.put(team, new DisplayScore("§a§l✔§r " + team.getColoredName()));
         }
-        new NovusScore();
-        this.currentTeam = new NovusScore(" §aLädt...");
-        new NovusScore("Dein Team:");
-        new NovusScore();
+        new DisplayScore();
+        this.currentTeam = new DisplayScore(" §aLädt...");
+        new DisplayScore("Dein Team:");
+        new DisplayScore();
 
         super.show();
     }
@@ -78,7 +76,7 @@ public class IngameScoreboard extends NovusScoreboard {
         }
 
         for (Team allTeams : Team.values()) {
-            NovusScore score;
+            DisplayScore score;
             if ((score = scores.get(allTeams)) != null) {
                 String entry = (allTeams.isHasBed() && !allTeams.getMembers().isEmpty() ? "§a§l✔§r " : "§c§l✘§r ") + allTeams.getColoredName() + "§8 (" + allTeams.getMembers().size() + "/" + Team.TEAM_SIZE + ")";
                 if (!score.getScore().getEntry().equals(entry)) {

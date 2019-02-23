@@ -11,13 +11,12 @@ import de.novusmc.bedwars.inventory.TeamSelectInventory;
 import de.novusmc.bedwars.listener.*;
 import de.novusmc.bedwars.manager.BedManager;
 import de.novusmc.bedwars.manager.LocationManager;
+import de.novusmc.bedwars.manager.NpcManager;
 import de.novusmc.bedwars.manager.SpawnerManager;
-import de.novusmc.bedwars.npc.NPCManager;
-import de.novusmc.bedwars.npc.PacketReader;
 import de.novusmc.bedwars.phase.GamePhaseHandler;
 import de.novusmc.bedwars.phase.type.LobbyPhase;
 import de.novusmc.bedwars.util.SkullCache;
-import de.pauhull.scoreboard.NovusScoreboardManager;
+import de.pauhull.scoreboard.ScoreboardManager;
 import lombok.Getter;
 import net.minecraft.server.v1_8_R3.DedicatedPlayerList;
 import org.bukkit.Bukkit;
@@ -27,7 +26,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.inventivetalent.packetlistener.PacketListenerAPI;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +51,7 @@ public class BedWars extends JavaPlugin {
     @Getter
     private GamePhaseHandler phaseHandler;
     @Getter
-    private NPCManager npcManager;
+    private NpcManager npcManager;
     @Getter
     private ShopInventory shopInventory;
     @Getter
@@ -67,7 +65,7 @@ public class BedWars extends JavaPlugin {
     @Getter
     private SpawnerManager spawnerManager;
     @Getter
-    private NovusScoreboardManager scoreboardManager;
+    private ScoreboardManager scoreboardManager;
     @Getter
     private File configFile;
     @Getter
@@ -100,14 +98,14 @@ public class BedWars extends JavaPlugin {
         this.pluginEnabled = config.getBoolean("Enabled");
         this.executorService = Executors.newSingleThreadExecutor();
         this.phaseHandler = new GamePhaseHandler();
-        this.npcManager = new NPCManager(this);
+        this.npcManager = new NpcManager(this);
         this.shopInventory = new ShopInventory(this);
         this.teamSelectInventory = new TeamSelectInventory(this);
         this.spectatorInventory = new SpectatorInventory(this);
         this.locationManager = new LocationManager(this);
         this.spawnerManager = new SpawnerManager(this);
         this.bedManager = new BedManager(this);
-        this.scoreboardManager = new NovusScoreboardManager(this, LobbyScoreboard.class);
+        this.scoreboardManager = new ScoreboardManager(this, LobbyScoreboard.class);
         this.mySQL = new MySQL(config.getString("MySQL.Host"),
                 config.getString("MySQL.Port"),
                 config.getString("MySQL.Database"),
@@ -146,6 +144,7 @@ public class BedWars extends JavaPlugin {
             new FoodLevelChangeListener(this);
             new InventoryClickListener(this);
             new PlayerAchievementAwardedListener(this);
+            new PlayerPortalListener(this);
             new PlayerDeathListener(this);
             new PlayerDropItemListener(this);
             new PlayerInteractAtEntityListener(this);
@@ -160,6 +159,7 @@ public class BedWars extends JavaPlugin {
             new PlayerRespawnListener(this);
             new PlayerToggleSneakListener(this);
             new PrepareItemCraftListener(this);
+            new PlayerClickNpcListener(this);
             new WeatherChangeListener(this);
         }
 
@@ -169,7 +169,6 @@ public class BedWars extends JavaPlugin {
         new StartCommand(this);
         new SpawnerCommand(this);
         new StatsCommand(this);
-        PacketListenerAPI.addPacketHandler(new PacketReader());
     }
 
     @Override
