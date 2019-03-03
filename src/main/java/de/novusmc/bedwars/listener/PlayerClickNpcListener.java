@@ -2,7 +2,6 @@ package de.novusmc.bedwars.listener;
 
 import de.novusmc.bedwars.BedWars;
 import de.pauhull.npcapi.event.PlayerClickNpcEvent;
-import net.minecraft.server.v1_8_R3.PacketPlayInUseEntity.EnumEntityUseAction;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,7 +30,7 @@ public class PlayerClickNpcListener implements Listener {
             return;
         }
 
-        if (event.getAction() == EnumEntityUseAction.INTERACT && event.getNpc().getName().equals("§cShop")) {
+        if (event.getAction() == PlayerClickNpcEvent.Action.INTERACT && event.getNpc().getName().equals("§cShop")) {
             bedWars.getShopInventory().show(player);
         }
     }

@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,6 +38,7 @@ public class PlayerInteractListener implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
         ItemStack stack = event.getItem();
+        Block block = event.getClickedBlock();
 
         if (bedWars.getSpectators().contains(player)) {
             event.setCancelled(true);
@@ -54,13 +56,22 @@ public class PlayerInteractListener implements Listener {
             if (stack != null) {
                 if (stack.equals(ItemManager.LEAVE)) {
                     player.kickPlayer("");
-                } else if (stack.equals(ItemManager.START_GAME)) {
-                    Bukkit.dispatchCommand(player, "start");
                 } else if (stack.equals(ItemManager.TEAM_SELECT)) {
                     bedWars.getTeamSelectInventory().show(player);
                 }
             }
         } else {
+            if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+                if (block.getType() == Material.ENDER_CHEST) {
+                    event.setCancelled(true);
+                    Team team = Team.getTeam(player);
+                    if (team != null) {
+                        player.openInventory(team.getChestInventory());
+                    }
+                    return;
+                }
+            }
+
             if (stack != null) {
                 stack = new ItemBuilder(stack).setAmount(1).build();
 

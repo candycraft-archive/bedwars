@@ -15,9 +15,8 @@ import org.bukkit.inventory.ItemStack;
  */
 public class ItemManager {
 
-    public static final ItemStack START_GAME = new ItemBuilder(Material.FEATHER).setDisplayName("§aSpiel starten §7§o<Rechtsklick>").build();
     public static final ItemStack LEAVE = new ItemBuilder(Material.SLIME_BALL).setDisplayName("§eZur Lobby §7§o<Rechtsklick>").build();
-    public static final ItemStack TEAM_SELECT = new ItemBuilder(Material.BED).setDisplayName("§bTeam auswählen §7§o<Rechtsklick>").build();
+    public static final ItemStack TEAM_SELECT = new ItemBuilder(Material.COMPASS).setDisplayName("§bTeam auswählen §7§o<Rechtsklick>").build();
     public static final ItemStack SPECTATE = new ItemBuilder(Material.COMPASS).setDisplayName("§cSpieler zuschauen §7§o<Rechtsklick>").build();
 
     public static void giveLobbyItems(Player player) {
@@ -31,9 +30,8 @@ public class ItemManager {
         player.getInventory().clear();
         player.getInventory().setArmorContents(new ItemStack[4]);
         player.getInventory().setHeldItemSlot(4);
-        player.getInventory().setItem(2, START_GAME);
-        player.getInventory().setItem(4, TEAM_SELECT);
-        player.getInventory().setItem(6, LEAVE);
+        player.getInventory().setItem(1, TEAM_SELECT);
+        player.getInventory().setItem(7, LEAVE);
     }
 
     public static void giveSpectatorItems(Player player) {
