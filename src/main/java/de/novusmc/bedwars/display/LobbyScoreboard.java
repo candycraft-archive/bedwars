@@ -28,8 +28,6 @@ public class LobbyScoreboard extends CustomScoreboard {
 
     @Override
     public void show() {
-        if (true) return;
-
         new DisplayScore(" §d§lCandyCraft§7.§dde");
         new DisplayScore("Server:");
         new DisplayScore();

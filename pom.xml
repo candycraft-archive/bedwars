@@ -11,7 +11,7 @@
     <repositories>
         <repository>
             <id>candycraft-repo</id>
-            <url>https://repo.morx.me/repository/internal</url>
+            <url>https://repo.morx.me/repository/internal/</url>
         </repository>
         <repository>
             <id>TimoCloud-API</id>
@@ -48,13 +48,12 @@
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
-
         <dependency>
             <groupId>de.pauhull</groupId>
             <artifactId>scoreboard-api</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
-
         <dependency>
             <groupId>de.pauhull</groupId>
             <artifactId>nickapi</artifactId>

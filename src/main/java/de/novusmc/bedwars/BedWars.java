@@ -19,6 +19,7 @@ import de.pauhull.uuidfetcher.spigot.SpigotUUIDFetcher;
 import lombok.Getter;
 import net.minecraft.server.v1_8_R3.DedicatedPlayerList;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -177,6 +178,10 @@ public class BedWars extends JavaPlugin {
         new StatsCommand(this);
 
         topPlayerManager.init();
+        for (World world : Bukkit.getWorlds()) {
+            world.setGameRuleValue("doIceTick", "false");
+            world.setGameRuleValue("keepInventory", "false");
+        }
     }
 
     @Override
