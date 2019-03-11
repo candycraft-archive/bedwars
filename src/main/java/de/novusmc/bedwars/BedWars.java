@@ -9,14 +9,13 @@ import de.novusmc.bedwars.inventory.ShopInventory;
 import de.novusmc.bedwars.inventory.SpectatorInventory;
 import de.novusmc.bedwars.inventory.TeamSelectInventory;
 import de.novusmc.bedwars.listener.*;
-import de.novusmc.bedwars.manager.BedManager;
-import de.novusmc.bedwars.manager.LocationManager;
-import de.novusmc.bedwars.manager.NpcManager;
-import de.novusmc.bedwars.manager.SpawnerManager;
+import de.novusmc.bedwars.manager.*;
 import de.novusmc.bedwars.phase.GamePhaseHandler;
 import de.novusmc.bedwars.phase.type.LobbyPhase;
 import de.novusmc.bedwars.util.SkullCache;
 import de.pauhull.scoreboard.ScoreboardManager;
+import de.pauhull.uuidfetcher.common.fetcher.UUIDFetcher;
+import de.pauhull.uuidfetcher.spigot.SpigotUUIDFetcher;
 import lombok.Getter;
 import net.minecraft.server.v1_8_R3.DedicatedPlayerList;
 import org.bukkit.Bukkit;
@@ -84,11 +83,17 @@ public class BedWars extends JavaPlugin {
     private StatsTable statsTable;
     @Getter
     private FileConfiguration gameSettings;
+    @Getter
+    private UUIDFetcher uuidFetcher;
+    @Getter
+    private TopPlayerManager topPlayerManager;
 
     @Override
     public void onEnable() {
         instance = this;
 
+        this.topPlayerManager = new TopPlayerManager(this);
+        this.uuidFetcher = SpigotUUIDFetcher.getInstance();
         this.skullCache = new SkullCache();
         this.spectators = new ArrayList<>();
         this.placedBlocks = new ArrayList<>();
@@ -163,12 +168,15 @@ public class BedWars extends JavaPlugin {
             new WeatherChangeListener(this);
         }
 
+        new JumpAndRunListener(this);
         new NpcCommand(this);
         new SetLocationCommand(this);
         new BedCommand(this);
         new StartCommand(this);
         new SpawnerCommand(this);
         new StatsCommand(this);
+
+        topPlayerManager.init();
     }
 
     @Override

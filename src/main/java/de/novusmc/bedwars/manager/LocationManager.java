@@ -44,6 +44,10 @@ public class LocationManager {
         save();
     }
 
+    public boolean isSet(String name) {
+        return getLocation(name) != null;
+    }
+
     public void teleport(Player player, String name) {
         Location location = getLocation(name);
         if (location != null) {

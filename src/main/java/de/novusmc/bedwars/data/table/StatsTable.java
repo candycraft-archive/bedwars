@@ -8,6 +8,8 @@ import lombok.ToString;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
@@ -86,6 +88,24 @@ public class StatsTable {
                 mySQL.update(sql);
             }
 
+        });
+    }
+
+    public void getTopPlayers(int amount, Consumer<List<UUID>> consumer) {
+        executorService.execute(() -> {
+            try {
+
+                List<UUID> uuids = new ArrayList<>();
+                ResultSet result = mySQL.query("SELECT * FROM `" + TABLE + "` ORDER BY `wins` DESC LIMIT " + amount);
+                while (result.next()) {
+                    uuids.add(UUID.fromString(result.getString("uuid")));
+                }
+                consumer.accept(uuids);
+
+            } catch (SQLException e) {
+                consumer.accept(new ArrayList<>());
+                e.printStackTrace();
+            }
         });
     }
 

@@ -3,7 +3,7 @@ name: BedWars
 version: 1.0
 main: de.novusmc.bedwars.BedWars
 load: POSTWORLD
-softdepend: [Multiverse-Core, NickAPI, NpcApi]
+softdepend: [Multiverse-Core, NickAPI, NpcApi, SpigotUUIDFetcher]
 
 commands:
   npc:

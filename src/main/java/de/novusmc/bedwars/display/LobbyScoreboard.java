@@ -22,12 +22,14 @@ public class LobbyScoreboard extends CustomScoreboard {
     private DisplayScore online, team;
 
     public LobbyScoreboard(Player player) {
-        super(player, player.getName() + "_lobby", "§5§lWarten auf Spielstart...");
+        super(player, player.getName() + "_lobby", "§5§lBedwars Lobby");
         this.descending = false;
     }
 
     @Override
     public void show() {
+        if (true) return;
+
         new DisplayScore(" §d§lCandyCraft§7.§dde");
         new DisplayScore("Server:");
         new DisplayScore();
