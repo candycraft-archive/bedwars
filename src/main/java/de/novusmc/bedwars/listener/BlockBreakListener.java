@@ -49,7 +49,7 @@ public class BlockBreakListener implements Listener {
             bedWars.getPlacedBlocks().remove(block);
         }
 
-        if (block.getType() == Material.WEB) {
+        if (block.getType() == Material.WEB || block.getType() == Material.ENDER_CHEST) {
             event.setCancelled(true);
             event.getBlock().setType(Material.AIR);
             return;
