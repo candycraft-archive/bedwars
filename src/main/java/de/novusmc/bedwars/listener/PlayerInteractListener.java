@@ -1,12 +1,14 @@
 package de.novusmc.bedwars.listener;
 
 import de.novusmc.bedwars.BedWars;
+import de.novusmc.bedwars.Messages;
 import de.novusmc.bedwars.game.Team;
 import de.novusmc.bedwars.inventory.ExtrasInventory;
 import de.novusmc.bedwars.manager.ItemManager;
 import de.novusmc.bedwars.phase.GamePhase;
 import de.novusmc.bedwars.util.InventoryUtils;
 import de.novusmc.bedwars.util.ItemBuilder;
+import de.novusmc.bedwars.util.TimedHashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,6 +21,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by Paul
  * on 04.01.2019
@@ -28,9 +32,11 @@ import org.bukkit.inventory.ItemStack;
 public class PlayerInteractListener implements Listener {
 
     private BedWars bedWars;
+    private TimedHashMap<Player, Object> baseTeleportCooldown;
 
     public PlayerInteractListener(BedWars bedWars) {
         this.bedWars = bedWars;
+        this.baseTeleportCooldown = new TimedHashMap<>(TimeUnit.SECONDS, 10);
         Bukkit.getPluginManager().registerEvents(this, bedWars);
     }
 
@@ -112,12 +118,18 @@ public class PlayerInteractListener implements Listener {
                 } else if (stack.equals(ExtrasInventory.SHOP_STRIPPED)) {
                     bedWars.getShopInventory().show(player);
                 } else if (stack.equals(ExtrasInventory.BASE_TELEPORT_STRIPPED)) {
+                    if (baseTeleportCooldown.containsKey(player)) {
+                        player.sendMessage(Messages.PREFIX + "§cDu musst 10 Sekunden warten, bis du den Base-Teleport erneut benutzen kannst.");
+                        return;
+                    }
+
                     Team team = Team.getTeam(player);
                     if (team != null) {
                         player.setFallDistance(0);
                         player.teleport(team.getSpawnLocation());
                         player.playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 10, 1);
                         InventoryUtils.removeItems(player.getInventory(), ExtrasInventory.BASE_TELEPORT_STRIPPED, 1);
+                        baseTeleportCooldown.put(player, new Object());
                     }
                 }
             }
