@@ -7,9 +7,13 @@ import de.novusmc.bedwars.game.Team;
 import de.novusmc.bedwars.phase.GamePhase;
 import de.novusmc.bedwars.phase.GamePhaseHandler;
 import lombok.Getter;
+import net.minecraft.server.v1_8_R3.DedicatedPlayerList;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
 import org.bukkit.entity.Player;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,6 +53,16 @@ public class IngamePhase extends GamePhase {
 
     @Override
     public void start() {
+        MinecraftServer.getServer().setMotd(Long.toString(System.currentTimeMillis()));
+        try {
+            DedicatedPlayerList server = ((CraftServer) Bukkit.getServer()).getHandle();
+            Field maxPlayers = server.getClass().getSuperclass().getDeclaredField("maxPlayers");
+            maxPlayers.setAccessible(true);
+            maxPlayers.set(server, Team.MAX_PLAYERS + 10);
+        } catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+        }
+
         TimoCloudAPI.getBukkitAPI().getThisServer().setState("INGAME");
         BedWars.getInstance().getSpawnerManager().startSpawning();
         BedWars.getInstance().getScoreboardManager().setScoreboard(IngameScoreboard.class);

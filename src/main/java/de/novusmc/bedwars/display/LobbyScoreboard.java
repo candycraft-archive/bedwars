@@ -7,8 +7,8 @@ import de.pauhull.friends.common.party.Party;
 import de.pauhull.friends.spigot.SpigotFriends;
 import de.pauhull.scoreboard.CustomScoreboard;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import ru.tehkode.permissions.PermissionGroup;
 
 
 /**
@@ -67,6 +67,17 @@ public class LobbyScoreboard extends CustomScoreboard {
         SpigotFriends.getInstance().getPartyManager().getAllParties(parties -> {
             Bukkit.getScheduler().runTask(BedWars.getInstance(), () -> {
 
+                String prefix;
+                String rank;
+                if (player.getDisplayName().equals(player.getName())) {
+                    PermissionGroup group = this.getHighestPermissionGroup(player);
+                    rank = group.getRank() + "";
+                    prefix = group.getPrefix();
+                } else {
+                    rank = "65";
+                    prefix = "§a";
+                }
+
                 Team team = Team.getTeam(player);
 
                 String name = team != null ? team.name() + player.getName() : "Z" + player.getName();
@@ -80,20 +91,22 @@ public class LobbyScoreboard extends CustomScoreboard {
 
                 org.bukkit.scoreboard.Team scoreboardTeam = scoreboard.registerNewTeam(name);
 
-                StringBuilder suffix = new StringBuilder();
+                String suffix = "";
+                String suffixColor = "";
                 for (Party party : parties) {
                     if (party.getMembers().contains(player.getDisplayName()) && party.getMembers().contains(this.player.getDisplayName())) {
-                        suffix.append("§7 [§5Party§7]");
+                        suffix = " [Party]";
+                        suffixColor = "§7";
                     }
                 }
-                scoreboardTeam.setSuffix(suffix.toString());
-
-                if (team == null) {
-                    scoreboardTeam.setPrefix(ChatColor.GRAY.toString());
-                } else {
-                    scoreboardTeam.setPrefix(team.getChatColor().toString());
+                if (suffix.equals("") && team != null) {
+                    suffix = " [" + team.getName() + "]";
+                }
+                if (team != null) {
+                    suffixColor = team.getChatColor().toString();
                 }
 
+                scoreboardTeam.setSuffix(suffixColor + suffix);
                 scoreboardTeam.addEntry(player.getName());
             });
         });
