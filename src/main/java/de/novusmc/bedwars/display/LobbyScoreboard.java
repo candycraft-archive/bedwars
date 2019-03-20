@@ -80,7 +80,7 @@ public class LobbyScoreboard extends CustomScoreboard {
 
                 Team team = Team.getTeam(player);
 
-                String name = team != null ? team.name() + player.getName() : "Z" + player.getName();
+                String name = team != null ? team.name() + rank + player.getName() : "Z" + rank + player.getName();
                 if (name.length() > 16) {
                     name = name.substring(0, 16);
                 }
@@ -107,6 +107,7 @@ public class LobbyScoreboard extends CustomScoreboard {
                 }
 
                 scoreboardTeam.setSuffix(suffixColor + suffix);
+                scoreboardTeam.setPrefix(prefix);
                 scoreboardTeam.addEntry(player.getName());
             });
         });
