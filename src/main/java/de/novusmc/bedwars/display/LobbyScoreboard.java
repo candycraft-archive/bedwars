@@ -7,6 +7,7 @@ import de.pauhull.friends.common.party.Party;
 import de.pauhull.friends.spigot.SpigotFriends;
 import de.pauhull.scoreboard.CustomScoreboard;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import ru.tehkode.permissions.PermissionGroup;
 
@@ -72,7 +73,7 @@ public class LobbyScoreboard extends CustomScoreboard {
                 if (player.getDisplayName().equals(player.getName())) {
                     PermissionGroup group = this.getHighestPermissionGroup(player);
                     rank = group.getRank() + "";
-                    prefix = group.getPrefix();
+                    prefix = ChatColor.translateAlternateColorCodes('&', group.getPrefix());
                 } else {
                     rank = "65";
                     prefix = "§a";
